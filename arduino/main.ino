@@ -1,14 +1,7 @@
-#define motorPwm 3
-#define forward 2
+#define motorPwm 2
+#define forward 3
 #define backward 4
-#define encA 5
-#define encB 6
 #define bulb 7
-
-/*int curEnc = 0;
-bool curA = false,
-     curB = false,
-     oldA = false;*/
 
 byte buff = 0;
 
@@ -68,51 +61,35 @@ void setup() {
   pinMode(motorPwm, OUTPUT);
   pinMode(forward, OUTPUT);
   pinMode(backward, OUTPUT);
-  //pinMode(encA, INPUT);
-  //pinMode(encB, INPUT);
 }
 
 void loop() {
-  /*if(digitalRead(encA) == HIGH)
-    curA = true;
-  else
-    curA = false;
-  if(digitalRead(encB) == HIGH)
-    curB = true;
-  else
-    curB = false;
-  if(curA != oldA)
-  {
-    oldA = curA;
-    if(curA != curB)
-    {
-      curEnc++;
-    }
-    if(curA == curB)
-    {
-      curEnc--;
-    }
-  }*/
   if(Serial.available() > 0)
   {
     buff = Serial.read();
-    if(buff & 1 && !df)
+    if(buff & 128)
     {
-      blinkLed();
-      //openDoor()
+      if((buff & 1) && !df)
+      {
+        blinkLed();
+        //openDoor();
+      }
+      else if(!(buff & 1) && df)
+      {
+        blinkLed();
+        //closeDoor();
+      }
     }
-    else if(!(buff & 1) && df)
+    else
     {
-      blinkLed();
-      //closeDoor()
-    }
-    if(buff & 2 && !bf)
-    {
-      turnOn();
-    }
-    else if(!(buff & 2) && bf)
-    {
-      turnOff();
+      if((buff & 1) && !bf)
+      {
+        turnOn();
+      }
+      else if(!(buff & 1) && bf)
+      {
+        turnOff();
+      }
     }
     Serial.print(buff, BIN);
   }

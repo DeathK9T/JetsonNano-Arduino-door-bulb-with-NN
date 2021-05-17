@@ -1,9 +1,10 @@
 #!/bin/bash
-while [[ $answer != "y" ]]
-do
-	echo "Did you remove usb camera?[y/n]"
-	read answer
-done
-cd ~/Downloads
-sudo dd if=tegra210-p3448-0000-p3449-0000-a02.dtb.encrypt of=/dev/mmcblk0p10
-reboot
+echo "Did you remove usb camera?[Y/n]"
+read answer
+if [[ $answer == "y" || $answer == "Y" || $answer == "" ]]; then
+	cd ~/Downloads
+	sudo dd if=tegra210-p3448-0000-p3449-0000-a02.dtb.encrypt of=/dev/mmcblk0p10
+	reboot
+else
+	break
+fi
